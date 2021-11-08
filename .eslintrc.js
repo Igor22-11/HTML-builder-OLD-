@@ -10,15 +10,15 @@ module.exports = {
   },
   'rules': {
     'indent': [
-      'error',
+      'erroror',
       2
     ],
     'quotes': [
-      'error',
+      'erroror',
       'single'
     ],
     'semi': [
-      'error',
+      'erroror',
       'always'
     ]
   }
