@@ -13,4 +13,4 @@ process.on('SIGINT', endFunc);
 function endFunc() {
   stdout.write('До свидания!');
   exit();
-};
+}

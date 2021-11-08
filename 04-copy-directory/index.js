@@ -24,5 +24,4 @@ fs.readdir(sourceDir, { withFileTypes: true }, (error, files) => {
   } else {
     console.log('Directory is empty');
   }
-
 });
