@@ -1,27 +1,23 @@
 let path = require('path');
-let fs = require('fs');
-let sourceDir = path.join(__dirname, '/files');
-fs.readdir(sourceDir, { withFileTypes: true }, (error, files) => {
-  if (error) {
-    console.erroror(error.message);
-  }
-  if (files.length) {
-    let onlyFiles = files.filter(file => file.isFile());
-    let copyDir = path.join(__dirname, '/files-copy');
-    fs.mkdir(copyDir, { recursive: true }, (error) => {
-      if (error) {
-        console.erroror(error);
-      }
+let fs = require('fs/promises');
+let dir = path.join(__dirname, 'files');
+let dircopy = path.join(__dirname, 'files-copy');
+
+fs.rm(dircopy, {
+    recursive: true,
+    force: true
+}).finally(function() {
+    fs.mkdir(dircopy, {
+        recursive: true
     });
-    onlyFiles.forEach(file => {
-      let pathFile = path.join(sourceDir, file.name);
-      let pathCopy = path.join(copyDir, file.name);
-      fs.copyFile(pathFile, pathCopy, (error) => {
-        if (error) {console.log(error);
-        }
-      });
+    fs.readdir(dir, {
+        withFileTypes: true
+    }).then(function(data) {
+        data.forEach(function(item) {
+            if (item.isFile()) {
+                let pathItem = path.join(dir, item.name);
+                let pathItemDes = path.join(dircopy, item.name);
+                fs.copyFile(pathItem, pathItemDes);}
+        });
     });
-  } else {
-    console.log('Directory is empty');
-  }
 });
