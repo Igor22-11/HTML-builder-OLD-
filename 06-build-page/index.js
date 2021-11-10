@@ -11,19 +11,19 @@ fs.readdir(pathStyles, {withFileTypes: true}, async (error, files) => {
     console.log(error);
   }
   else {
-    files.forEach((file, index) => {
+    files.forEach(function(file, index) {
       let filePath = path.join(pathStyles, file.name);
       if (file.isFile() && file.name.split('.')[1] === 'css') {
-        fs.readFile(filePath, 'utf8', (error, data) => {
+        fs.readFile(filePath, 'utf8', function (error, data) {
           if(error) {
             console.log(error);
           } else if (index === 0) {
-            fs.writeFile(path.join(pathCopy, 'style.css'), data, error => {
+            fs.writeFile(path.join(pathCopy, 'style.css'), data, function (error) {
               if(error)
                 console.log(error);
             });
           }  else {
-            fs.appendFile(path.join(pathCopy, 'style.css'), data, error => {
+            fs.appendFile(path.join(pathCopy, 'style.css'), data, function(error) {
               if(error)
                 console.log(error);
             });
@@ -35,13 +35,13 @@ fs.readdir(pathStyles, {withFileTypes: true}, async (error, files) => {
 });
 
 function recurceCopy(dir, exit) {
-  fs.readdir(dir, {withFileTypes: true}, (error, files) => {
+  fs.readdir(dir, {withFileTypes: true}, function (error, files) {
     if (error) throw error;
-    files.forEach(file => {
+    files.forEach(function(file) {
       if (!file.isFile()) {
-        fs.stat(path.join(exit, file.name), (error) => {
+        fs.stat(path.join(exit, file.name), function(error) {
           if (error) {
-            fs.mkdir(path.join(exit, file.name), (error) => {
+            fs.mkdir(path.join(exit, file.name), function(error) {
               if (error) {
                 return console.erroror(error);
               }
@@ -52,22 +52,22 @@ function recurceCopy(dir, exit) {
           }
         });
       } else {
-        fs.copyFile(`${dir}\\${file.name}`, `${exit}\\${file.name}`, error =>{
+        fs.copyFile(`${dir}\\${file.name}`, `${exit}\\${file.name}`, function(error){
           if (error) throw error;
         });
       }
     });
   });
 }
-fs.stat (pathCopy, (error) => {
+fs.stat (pathCopy, function (error) {
   if (error) {
-    fs.mkdir(pathCopy, (error) => {
+    fs.mkdir(pathCopy, function (error) {
       if (error) {
         return console.erroror(error);
       }
       });
     createTemplate();
-  } else {  fs.readdir(pathCopy, (error) => {
+  } else {  fs.readdir(pathCopy, function (error)  {
     if (error)
       console.log(error);
     else {
@@ -78,9 +78,9 @@ fs.stat (pathCopy, (error) => {
   }
 });
 
-fs.stat (pathAssetsCopy, (error) => {
+fs.stat (pathAssetsCopy, function (error) {
   if (error) {
-    fs.mkdir(pathAssetsCopy, (error) => {
+    fs.mkdir(pathAssetsCopy, function(error) {
       if (error) {
         return console.erroror(error);
       }
@@ -93,24 +93,29 @@ fs.stat (pathAssetsCopy, (error) => {
 });
 
 function createTemplate() {
-  fs.copyFile(`${__dirname}\\template.html`, `${pathCopy}\\index.html`, error =>{
+  fs.copyFile(`${__dirname}\\template.html`, `${pathCopy}\\index.html`, function (error) {
     if (error) throw error;
-    fs.readFile(`${pathCopy}\\index.html`, 'utf8', (error, data) => {
+    fs.readFile(`${pathCopy}\\index.html`, 'utf8', function(error, data) {
       if(error) throw error;
-      fs.readdir(folderPath, {withFileTypes: true}, (error, files) => {
+      fs.readdir(folderPath, {withFileTypes: true}, function (error, files) {
         if (error) throw error;
 
-        files.forEach(file => {
-          fs.readFile(`${folderPath}\\${file.name}`, 'utf8', (error, dataFile) => {
+        files.forEach(function(file) {
+          fs.readFile(`${folderPath}\\${file.name}`, 'utf8', function(error, dataFile) {
             if(error) throw error;
             let tagName = `{{${file.name.split('.')[0]}}}`;
             data = data.replace(tagName, dataFile);
-            fs.writeFile(`${pathCopy}\\index.html`, data, error => {
+            fs.writeFile(`${pathCopy}\\index.html`, data, function (error) {
               if(error)
                 console.log(error);});
           });
+          
         });
+        
       });
+      
     });
+    
   });
+  
 }
